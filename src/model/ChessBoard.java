@@ -14,7 +14,7 @@ import view.GridSquare;
 @SuppressWarnings("serial")
 public class ChessBoard extends JPanel {
 
-	public static final int axisLength = 10; // default = 8
+	public static final int axisLength = 8; // default = 8
 	private GridSquare[][] squares = new GridSquare[axisLength][axisLength];
 	public GridSquare selectedSquare;
 	private ArrayList<Coordinate> validMoves;
@@ -163,7 +163,7 @@ public class ChessBoard extends JPanel {
 
 	private boolean checkValidity(int row, int column) {
 		if (row >= 0 && row < axisLength && column >= 0 && column < axisLength) {
-			Piece piece  = squares[row][column].getPiece();
+			Piece piece = squares[row][column].getPiece();
 			if (selectedSquare.getPiece().getType() != "Pawn") {
 
 				if (piece != null) {
@@ -250,10 +250,10 @@ public class ChessBoard extends JPanel {
 	}
 
 	private void checkForPromotion(GridSquare square) {
-		if (square.getPiece().getColour() == "White" && square.getRow() == 0) {
+		if (square.getPiece().getColour() == "White" && square.getRow() == 0 && square.getPiece().getType() == "Pawn") {
 			square.setPiece(new Queen("White"));
 		}
-		if (square.getPiece().getColour() == "Black" && square.getRow() == axisLength - 1) {
+		if (square.getPiece().getColour() == "Black" && square.getRow() == axisLength - 1 && square.getPiece().getType() == "Pawn") {
 			square.setPiece(new Queen("Black"));
 		}
 		// TODO allow for choosing of the piece, via pop up with radio buttons(icons)?
