@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
 import view.GridSquare;
 
 @SuppressWarnings("serial")
@@ -110,9 +108,9 @@ public class ChessBoard extends JPanel {
 		return selectedSquare;
 	}
 
-//	public void setValidMoves(ArrayList<Coordinate> validMoves) {
-//		this.validMoves = validMoves;
-//	}
+	public void setValidMoves(ArrayList<Coordinate> validMoves) {
+		this.validMoves = validMoves;
+	}
 
 	public ArrayList<Coordinate> getValidMoves() {
 		return validMoves;
@@ -208,7 +206,9 @@ public class ChessBoard extends JPanel {
 				selectPieceAndShowMoves(square);
 			}
 		} else {
-			moveSelectedPieceToSquare(square);
+			if (isMoveLegal(square)) {
+				moveSelectedPieceToSquare(square);
+			}
 		}
 	}
 
@@ -253,7 +253,8 @@ public class ChessBoard extends JPanel {
 		if (square.getPiece().getColour() == "White" && square.getRow() == 0 && square.getPiece().getType() == "Pawn") {
 			square.setPiece(new Queen("White"));
 		}
-		if (square.getPiece().getColour() == "Black" && square.getRow() == axisLength - 1 && square.getPiece().getType() == "Pawn") {
+		if (square.getPiece().getColour() == "Black" && square.getRow() == axisLength - 1
+				&& square.getPiece().getType() == "Pawn") {
 			square.setPiece(new Queen("Black"));
 		}
 		// TODO allow for choosing of the piece, via pop up with radio buttons(icons)?
@@ -267,8 +268,57 @@ public class ChessBoard extends JPanel {
 			}
 		}
 	}
+
 	private boolean isMoveLegal(GridSquare square) {
-		return (moveIsValid && willBeInCheck(whosTurn))
+		return (isMoveValid(square) && willBeInCheck(square));
+	}
+
+	private boolean isMoveValid(GridSquare square) {
+		for (Coordinate coordinate : getValidMoves()) {
+			if (coordinate.getRow() == square.getRow() && coordinate.getColumn() == square.getColumn()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean willBeInCheck(GridSquare square) {
+		Piece oldPiece = selectedSquare.getPiece();
+		Piece newPiece = square.getPiece();
+		ArrayList<Coordinate> oldValidMoves = getValidMoves();
+
+		String notWhosTurn;
+		if (whosTurn == "White")
+			notWhosTurn = "Black";
+		else
+			notWhosTurn = "White";
+
+		square.setPiece(selectedSquare.getPiece());
+
+		GridSquare kingSquare = null;
+		for (int i = 0; i < axisLength; i++) {
+			for (int j = 0; j < axisLength; j++) {
+				if (squares[i][j].getPiece() != null && squares[i][j].getPiece().getType() == "King"
+						&& squares[i][j].getPiece().getColour() == whosTurn)
+					kingSquare = squares[i][j];
+			}
+		}
+
+		for (Coordinate coord : getAllMoves(notWhosTurn)) {
+			if (coord.getRow() == kingSquare.getRow() && coord.getColumn() == kingSquare.getColumn()) {
+				System.out.println(selectedSquare);
+				selectedSquare.setPiece(oldPiece);
+				square.setPiece(oldPiece);
+				setValidMoves(oldValidMoves);
+				return false;
+			}
+		}System.out.println(selectedSquare);
+
+		selectedSquare.setPiece(oldPiece);
+		square.setPiece(newPiece);
+		setValidMoves(oldValidMoves);
+
+		return true;
 	}
 
 	private ArrayList<Coordinate> getAllMoves(String colour) {
@@ -283,11 +333,11 @@ public class ChessBoard extends JPanel {
 					moves.addAll(getValidMoves(square.getPiece().getPossibleMoves(row, col)));
 				}
 			}
-			setSelectedSquare(null);
 		}
 		return moves;
 	}
 
+	@SuppressWarnings("unused")
 	private void showAllMoves(String colour) {
 		ArrayList<Coordinate> coordinates = getAllMoves(colour);
 		for (Coordinate coordinate : coordinates) {
