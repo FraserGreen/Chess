@@ -270,7 +270,8 @@ public class ChessBoard extends JPanel {
 	}
 
 	private boolean isMoveLegal(GridSquare square) {
-		return (isMoveValid(square) && willBeInCheck(square));
+		return (isMoveValid(square) && !willBeInCheck(square));
+//		return true;
 	}
 
 	private boolean isMoveValid(GridSquare square) {
@@ -303,25 +304,29 @@ public class ChessBoard extends JPanel {
 					kingSquare = squares[i][j];
 			}
 		}
+		System.out.println("square row, col: "+square.getRow()+", "+square.getColumn());
+		System.out.println("selected square row, col: "+selectedSquare.getRow()+", "+selectedSquare.getColumn());
 
 		for (Coordinate coord : getAllMoves(notWhosTurn)) {
 			if (coord.getRow() == kingSquare.getRow() && coord.getColumn() == kingSquare.getColumn()) {
-				System.out.println(selectedSquare);
+				System.out.println("King in check");
 				selectedSquare.setPiece(oldPiece);
 				square.setPiece(oldPiece);
 				setValidMoves(oldValidMoves);
-				return false;
+				return true; //king will be in check
 			}
-		}System.out.println(selectedSquare);
+		}
+		System.out.println("selected square row, col: "+selectedSquare.getRow()+", "+selectedSquare.getColumn());
 
 		selectedSquare.setPiece(oldPiece);
 		square.setPiece(newPiece);
 		setValidMoves(oldValidMoves);
 
-		return true;
+		return false; //king will not be in check
 	}
 
 	private ArrayList<Coordinate> getAllMoves(String colour) {
+		GridSquare oldSelectedSquare = selectedSquare;
 		ArrayList<Coordinate> moves = new ArrayList<Coordinate>();
 		if (colour != "White" && colour != "Black")
 			return null;
@@ -334,6 +339,7 @@ public class ChessBoard extends JPanel {
 				}
 			}
 		}
+		setSelectedSquare(oldSelectedSquare);
 		return moves;
 	}
 
