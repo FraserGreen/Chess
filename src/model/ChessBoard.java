@@ -267,6 +267,9 @@ public class ChessBoard extends JPanel {
 			}
 		}
 	}
+	private boolean isMoveLegal(GridSquare square) {
+		return false;
+	}
 
 	private ArrayList<Coordinate> getAllMoves(String colour) {
 		ArrayList<Coordinate> moves = new ArrayList<Coordinate>();
