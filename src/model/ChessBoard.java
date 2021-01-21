@@ -311,7 +311,7 @@ public class ChessBoard extends JPanel {
 			if (coord.getRow() == kingSquare.getRow() && coord.getColumn() == kingSquare.getColumn()) {
 				System.out.println("King in check");
 				selectedSquare.setPiece(oldPiece);
-				square.setPiece(oldPiece);
+				square.setPiece(newPiece);
 				setValidMoves(oldValidMoves);
 				return true; //king will be in check
 			}
