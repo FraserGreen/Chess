@@ -268,7 +268,7 @@ public class ChessBoard extends JPanel {
 		}
 	}
 	private boolean isMoveLegal(GridSquare square) {
-		return false;
+		return (moveIsValid && willBeInCheck(whosTurn))
 	}
 
 	private ArrayList<Coordinate> getAllMoves(String colour) {
