@@ -52,10 +52,10 @@ public class GridSquare extends JButton implements ActionListener {
 	public void setPiece(Piece piece) {
 		this.piece = piece;
 		if (piece != null)
-			setIcon(new ImageIcon(
-					((new ImageIcon("src/images/" + piece.getColour() + piece.getType() + ".png")).getImage())
-							.getScaledInstance(90, 90, java.awt.Image.SCALE_SMOOTH)));
-//		setIcon(piece.getImage());
+//			setIcon(new ImageIcon(
+//					((new ImageIcon("src/images/" + piece.getColour() + piece.getType() + ".png")).getImage())
+//							.getScaledInstance(90, 90, java.awt.Image.SCALE_SMOOTH)));
+		setIcon(piece.getImage());
 
 		else
 			setIcon(null);

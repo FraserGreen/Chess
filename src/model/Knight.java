@@ -8,6 +8,7 @@ public class Knight extends Piece {
 	public Knight(String colour) {
 		super(colour);
 		this.type = "Knight";
+		createImageIcon();
 	}
 	
 	@Override

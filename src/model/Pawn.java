@@ -7,6 +7,7 @@ public class Pawn extends Piece {
 	public Pawn(String colour) {
 		super(colour);
 		super.setType("Pawn");
+		createImageIcon();
 	}
 
 	@Override

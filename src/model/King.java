@@ -7,6 +7,7 @@ public class King extends Piece {
 	public King(String colour) {
 		super(colour);
 		this.type = "King";
+		createImageIcon();
 	}
 
 	@Override

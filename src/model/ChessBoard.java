@@ -226,7 +226,8 @@ public class ChessBoard extends JPanel {
 	private void moveSelectedPieceToSquare(GridSquare square) {
 		if (getValidMoves() != null) {
 			for (Coordinate validSquare : getValidMoves()) {
-				if (getSquare(validSquare.getRow(), validSquare.getColumn()).equals(square)) {
+
+				if (validSquare.getRow() == square.getRow() && validSquare.getColumn() == square.getColumn()) {
 					square.setPiece(selectedSquare.getPiece());
 					selectedSquare.setPiece(null);
 //					try { // uncomment to play pop sound on every move
@@ -295,7 +296,7 @@ public class ChessBoard extends JPanel {
 			notWhosTurn = "White";
 
 		square.setPiece(selectedSquare.getPiece());
-		selectedSquare.setPiece(null);
+//		selectedSquare.setPiece(null);
 
 		GridSquare kingSquare = null;
 		for (int i = 0; i < axisLength; i++) {
@@ -303,33 +304,31 @@ public class ChessBoard extends JPanel {
 				if (squares[i][j].getPiece() != null && squares[i][j].getPiece().getType() == "King"
 						&& squares[i][j].getPiece().getColour() == whosTurn) {
 					kingSquare = squares[i][j];
-					System.out.println("king rowcol: " + i + j);
+//					System.out.println("king rowcol: " + i + j);
 				}
 			}
 		}
-		System.out.println("square row, col: " + square.getRow() + ", " + square.getColumn());
-		System.out.println("selected square row, col: " + selectedSquare.getRow() + ", " + selectedSquare.getColumn());
-
-		try {
-			for (Coordinate coord : getAllMoves(notWhosTurn)) {
-				if (coord.getRow() == kingSquare.getRow() && coord.getColumn() == kingSquare.getColumn()) {
-					System.out.println("King in check");
-					return true; // king will be in check
-				}
+//		System.out.println("square row, col: " + square.getRow() + ", " + square.getColumn());
+//		System.out.println("selected square row, col: " + selectedSquare.getRow() + ", " + selectedSquare.getColumn());
+		System.out.println(selectedSquare.getRow()+", "+selectedSquare.getColumn());
+		for (Coordinate coord : getAllMoves(notWhosTurn)) {
+			if (coord.getRow() == kingSquare.getRow() && coord.getColumn() == kingSquare.getColumn()) {
+				System.out.println("King in check");
+				selectedSquare.setPiece(oldPiece);
+				square.setPiece(newPiece);
+				setValidMoves(oldValidMoves);
+				return true; // king will be in check
 			}
-			System.out.println(
-					"selected square row, col: " + selectedSquare.getRow() + ", " + selectedSquare.getColumn());
-			return false; // king will not be in check
-		} finally {
-			selectedSquare.setPiece(oldPiece);
-			square.setPiece(newPiece);
-			setValidMoves(oldValidMoves);
 		}
+		setValidMoves(oldValidMoves);
+		return false; // king will not be in check
 
 	}
 
 	private ArrayList<Coordinate> getAllMoves(String colour) {
-		GridSquare oldSelectedSquare = selectedSquare;
+		int oldSelectedSquareRow = selectedSquare.getRow();
+		int oldSelectedSquareColumn = selectedSquare.getColumn();
+
 		ArrayList<Coordinate> moves = new ArrayList<Coordinate>();
 		if (colour != "White" && colour != "Black")
 			return null;
@@ -342,7 +341,7 @@ public class ChessBoard extends JPanel {
 				}
 			}
 		}
-		setSelectedSquare(oldSelectedSquare);
+		setSelectedSquare(squares[oldSelectedSquareRow][oldSelectedSquareColumn]);
 		return moves;
 	}
 

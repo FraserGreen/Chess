@@ -13,11 +13,14 @@ public abstract class Piece {
 
 	public Piece(String colour) {
 		setColour(colour);
+		
+	}
+
+	protected void createImageIcon() {
 		image = new ImageIcon(
 				((new ImageIcon("src/images/" + colour + type + ".png")).getImage())
 				.getScaledInstance(90, 90, java.awt.Image.SCALE_SMOOTH));
 	}
-
 	private void setColour(String colour) {
 		if (colour != null && (colour == "Black" || colour == "White"))
 			this.colour = colour;

@@ -7,6 +7,7 @@ public class Queen extends Piece {
 	public Queen(String colour) {
 		super(colour);
 		this.type = "Queen";
+		createImageIcon();
 	}
 	@Override
 	public ArrayList<Coordinate> getPossibleMoves(int row, int column) {

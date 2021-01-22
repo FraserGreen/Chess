@@ -7,6 +7,7 @@ public class Bishop extends Piece {
 	public Bishop(String colour) {
 		super(colour);
 		this.type = "Bishop";
+		createImageIcon();
 	}
 
 	@Override
