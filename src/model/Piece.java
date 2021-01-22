@@ -2,13 +2,20 @@ package model;
 
 import java.util.ArrayList;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
 public abstract class Piece {
 
 	protected String colour;
 	protected String type;
+	protected ImageIcon image;
 
 	public Piece(String colour) {
 		setColour(colour);
+		image = new ImageIcon(
+				((new ImageIcon("src/images/" + colour + type + ".png")).getImage())
+				.getScaledInstance(90, 90, java.awt.Image.SCALE_SMOOTH));
 	}
 
 	private void setColour(String colour) {
@@ -32,6 +39,10 @@ public abstract class Piece {
 
 	public ArrayList<Coordinate> getPossibleMoves(int currentRow, int currentColumn) {
 		return null;
+	}
+
+	public Icon getImage() {
+		return image;
 	}
 
 }

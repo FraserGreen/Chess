@@ -55,6 +55,8 @@ public class GridSquare extends JButton implements ActionListener {
 			setIcon(new ImageIcon(
 					((new ImageIcon("src/images/" + piece.getColour() + piece.getType() + ".png")).getImage())
 							.getScaledInstance(90, 90, java.awt.Image.SCALE_SMOOTH)));
+//		setIcon(piece.getImage());
+
 		else
 			setIcon(null);
 	}

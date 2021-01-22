@@ -206,7 +206,7 @@ public class ChessBoard extends JPanel {
 				selectPieceAndShowMoves(square);
 			}
 		} else {
-			if (isMoveLegal(square)) {
+			if (selectedSquare != null && isMoveLegal(square)) {
 				moveSelectedPieceToSquare(square);
 			}
 		}
@@ -295,34 +295,37 @@ public class ChessBoard extends JPanel {
 			notWhosTurn = "White";
 
 		square.setPiece(selectedSquare.getPiece());
+		selectedSquare.setPiece(null);
 
 		GridSquare kingSquare = null;
 		for (int i = 0; i < axisLength; i++) {
 			for (int j = 0; j < axisLength; j++) {
 				if (squares[i][j].getPiece() != null && squares[i][j].getPiece().getType() == "King"
-						&& squares[i][j].getPiece().getColour() == whosTurn)
+						&& squares[i][j].getPiece().getColour() == whosTurn) {
 					kingSquare = squares[i][j];
+					System.out.println("king rowcol: " + i + j);
+				}
 			}
 		}
-		System.out.println("square row, col: "+square.getRow()+", "+square.getColumn());
-		System.out.println("selected square row, col: "+selectedSquare.getRow()+", "+selectedSquare.getColumn());
+		System.out.println("square row, col: " + square.getRow() + ", " + square.getColumn());
+		System.out.println("selected square row, col: " + selectedSquare.getRow() + ", " + selectedSquare.getColumn());
 
-		for (Coordinate coord : getAllMoves(notWhosTurn)) {
-			if (coord.getRow() == kingSquare.getRow() && coord.getColumn() == kingSquare.getColumn()) {
-				System.out.println("King in check");
-				selectedSquare.setPiece(oldPiece);
-				square.setPiece(newPiece);
-				setValidMoves(oldValidMoves);
-				return true; //king will be in check
+		try {
+			for (Coordinate coord : getAllMoves(notWhosTurn)) {
+				if (coord.getRow() == kingSquare.getRow() && coord.getColumn() == kingSquare.getColumn()) {
+					System.out.println("King in check");
+					return true; // king will be in check
+				}
 			}
+			System.out.println(
+					"selected square row, col: " + selectedSquare.getRow() + ", " + selectedSquare.getColumn());
+			return false; // king will not be in check
+		} finally {
+			selectedSquare.setPiece(oldPiece);
+			square.setPiece(newPiece);
+			setValidMoves(oldValidMoves);
 		}
-		System.out.println("selected square row, col: "+selectedSquare.getRow()+", "+selectedSquare.getColumn());
 
-		selectedSquare.setPiece(oldPiece);
-		square.setPiece(newPiece);
-		setValidMoves(oldValidMoves);
-
-		return false; //king will not be in check
 	}
 
 	private ArrayList<Coordinate> getAllMoves(String colour) {
